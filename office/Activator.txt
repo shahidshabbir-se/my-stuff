@@ -1,0 +1,4 @@
+irm https://massgrave.dev/get | iex
+dism /capture-image /imagefile:D:\install.esd /capturedir:c:\ /name:"NewISO" /compress:maximum 
+setup.exe /configure Configuration.xml
+
