@@ -6,9 +6,6 @@ fi
 # Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
-# Add Node.js and OpenJDK paths, ensuring they precede others in PATH
-export PATH="/home/linuxbrew/.linuxbrew/opt/node@20/bin:/home/linuxbrew/.linuxbrew/opt/openjdk@21/bin:$PATH"
-
 # Download Zinit, if it's not there yet
 if [ ! -d "$ZINIT_HOME" ]; then
    mkdir -p "$(dirname $ZINIT_HOME)"
@@ -85,25 +82,13 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 # Aliases
 alias vim='nvim'
 alias c='clear'
-alias fzf='/usr/bin/fzf --preview "\
-  if file --mime {} | grep -q image; then \
-    viu --width 40 --height 20 --static {}; \
-  else \
-    bat --style=numbers --color=always --line-range :500 {}; \
-  fi" --preview-window=right:50%'
+alias fzf='/usr/bin/fzf --preview "bat --style=numbers --color=always --line-range :500 {}; \fi" --preview-window=right:50%'
 alias e='exit'
 alias bc='better-commits'
 alias cat="bat"
 alias ls='eza --long --icons=always --git --no-time --no-user --no-permissions'
 alias nv="nvim"
 alias lg="lazygit"
-
-# Add Android SDK tools and platform-tools to PATH, avoiding duplicates
-export ANDROID_HOME="$HOME/Android/Sdk"
-export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
-
-# Initialize Homebrew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # Include additional paths
 export PATH="$HOME/.local/bin:/opt/nvim-linux64/bin:$PATH"
@@ -140,4 +125,3 @@ eval $(thefuck --alias fk)
 # - Ensure Arch's package manager is updated and use AUR for additional packages
 alias pacu="sudo pacman -Syu"  # Update all packages
 alias yayu="yay -Syu"          # Update all packages including AUR
-
