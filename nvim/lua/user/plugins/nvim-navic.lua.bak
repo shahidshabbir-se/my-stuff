@@ -1,0 +1,49 @@
+return {
+  "SmiteshP/nvim-navic",
+  requires = { "neovim/nvim-lspconfig" }, -- Ensure LSP is configured
+  config = function()
+    local navic = require("nvim-navic")
+
+    -- Configure navic
+    navic.setup({
+      -- Customize these settings as per your needs
+      highlight = true, -- Highlight the navigation context
+      depth = 3,     -- How deep to show context
+    })
+
+    -- Optional: Set up an autocommand to update the navic status line component
+    vim.api.nvim_create_autocmd({ "LspAttach" }, {
+      group = vim.api.nvim_create_augroup("NavicLsp", { clear = true }),
+      callback = function(args)
+        local buf = args.buf
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+        if client and client.server_capabilities.documentSymbolProvider then
+          -- If the LSP server supports document symbols, enable navic
+          navic.attach(client, buf)
+        end
+      end,
+    })
+
+    -- Configure your status line to include navic
+    local lualine = require("lualine")
+    lualine.setup({
+      sections = {
+        lualine_c = {
+          {
+            function()
+              return navic.get_location()
+            end,
+            cond = function()
+              return navic.is_available()
+            end,
+            -- color = { gui = "bold" }, -- Customize color or style as needed
+          },
+          "filename",
+        },
+        -- Other sections of lualine...
+      },
+      -- Optional: Configure the winbar to include navic
+    })
+  end,
+}
