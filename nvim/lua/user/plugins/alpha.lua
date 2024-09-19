@@ -4,9 +4,14 @@ return {
 	config = function()
 		local alpha = require("alpha")
 		local dashboard = require("alpha.themes.dashboard")
-
+		local button = dashboard.button
+		local icons = require("user.icons")
 		-- Set header
 		dashboard.section.header.val = {
+			[[                                                                       ]],
+			[[                                                                       ]],
+			[[                                                                       ]],
+			[[                                                                       ]],
 			[[                                                                       ]],
 			[[                                                                       ]],
 			[[                                                                     ]],
@@ -22,15 +27,18 @@ return {
 		}
 
 		dashboard.section.buttons.val = {
-			dashboard.button("n", "  New File", "<cmd>ene<CR>"),
-			dashboard.button("f", "  Find File", "<cmd>Telescope find_files<CR>"),
-			dashboard.button("o", "  Recent Files", "<cmd>Telescope oldfiles<CR>"),
-			dashboard.button("g", "  Find Text", "<cmd>Telescope live_grep<CR>"),
-			dashboard.button("c", "  Config", "<cmd>edit ~/.config/nvim/init.lua<CR>"),
-			dashboard.button("s", "  Restore Session", "<cmd>lua require('persistence').load()<CR>"),
-			dashboard.button("t", "  Restore Sessions", "<cmd>Telescope session-lens<CR>"),
-			dashboard.button("l", "󰒲  Lazy", "<cmd>Lazy<CR>"),
-			dashboard.button("q", "  Quit", "<cmd>qa<CR>"),
+			button("f", icons.ui.Files .. "  Find file", ":Telescope find_files <CR>"),
+			button("n", icons.ui.NewFile .. "  New file", ":ene <BAR> startinsert <CR>"),
+			-- button("s", icons.ui.SignIn .. " Load session", ":lua require('persistence').load()<CR>"),
+			button(
+				"p",
+				icons.git.Repo .. "  Find project",
+				":lua require('telescope').extensions.projects.projects()<CR>"
+			),
+			button("r", icons.ui.History .. "  Recent files", ":Telescope oldfiles <CR>"),
+			button("t", icons.ui.Text .. "  Find text", ":Telescope live_grep <CR>"),
+			button("c", icons.ui.Gear .. "  Config", ":e ~/.config/nvim/init.lua <CR>"),
+			button("q", icons.ui.SignOut .. "  Quit", ":qa<CR>"),
 		}
 
 		-- Send config to alpha

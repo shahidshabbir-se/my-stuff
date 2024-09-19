@@ -1,48 +1,111 @@
-return {
-  "lewis6991/gitsigns.nvim",
-  event = { "BufReadPre", "BufNewFile" },
-  opts = {
-    on_attach = function(bufnr)
-      local gs = package.loaded.gitsigns
-
-      local function map(mode, l, r, desc)
-        vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc })
-      end
-
-      -- Navigation
-      map("n", "]h", gs.next_hunk, "Next Hunk")
-      map("n", "[h", gs.prev_hunk, "Prev Hunk")
-
-      -- Actions
-      map("n", "<leader>hs", gs.stage_hunk, "Stage hunk")
-      map("n", "<leader>hr", gs.reset_hunk, "Reset hunk")
-      map("v", "<leader>hs", function()
-        gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-      end, "Stage hunk")
-      map("v", "<leader>hr", function()
-        gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-      end, "Reset hunk")
-
-      map("n", "<leader>hS", gs.stage_buffer, "Stage buffer")
-      map("n", "<leader>hR", gs.reset_buffer, "Reset buffer")
-
-      map("n", "<leader>hu", gs.undo_stage_hunk, "Undo stage hunk")
-
-      map("n", "<leader>hp", gs.preview_hunk, "Preview hunk")
-
-      map("n", "<leader>hb", function()
-        gs.blame_line({ full = true })
-      end, "Blame line")
-      map("n", "<leader>hB", gs.toggle_current_line_blame, "Toggle line blame")
-
-      map("n", "<leader>hd", gs.diffthis, "Diff this")
-      map("n", "<leader>hD", function()
-        gs.diffthis("~")
-      end, "Diff this ~")
-
-      -- Text object
-      map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "Gitsigns select hunk")
-    end,
-  },
+local M = {
+	"lewis6991/gitsigns.nvim",
+	event = "BufEnter",
+	cmd = "Gitsigns",
 }
 
+M.config = function()
+	local icons = require("user.icons")
+
+	local wk = require("which-key")
+
+	wk.add({
+		{
+			"<leader>gj",
+			"<cmd>lua require 'gitsigns'.next_hunk({navigation_message = false})<cr>",
+			desc = "Next Hunk",
+		},
+		{
+			"<leader>gk",
+			"<cmd>lua require 'gitsigns'.prev_hunk({navigation_message = false})<cr>",
+			desc = "Prev Hunk",
+		},
+		{
+			"<leader>gp",
+			"<cmd>lua require 'gitsigns'.preview_hunk()<cr>",
+			desc = "Preview Hunk",
+		},
+		{
+			"<leader>gr",
+			"<cmd>lua require 'gitsigns'.reset_hunk()<cr>",
+			desc = "Reset Hunk",
+		},
+		{
+			"<leader>gl",
+			"<cmd>lua require 'gitsigns'.blame_line()<cr>",
+			desc = "Blame",
+		},
+		{
+			"<leader>gR",
+			"<cmd>lua require 'gitsigns'.reset_buffer()<cr>",
+			desc = "Reset Buffer",
+		},
+		{
+			"<leader>gs",
+			"<cmd>lua require 'gitsigns'.stage_hunk()<cr>",
+			desc = "Stage Hunk",
+		},
+		{
+			"<leader>gu",
+			"<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
+			desc = "Undo Stage Hunk",
+		},
+		{
+			"<leader>gd",
+			"<cmd>Gitsigns diffthis HEAD<cr>",
+			desc = "Git Diff",
+		},
+	})
+
+	require("gitsigns").setup({
+		signs = {
+			add = {
+				-- hl = "GitSignsAdd",
+				text = icons.ui.BoldLineMiddle,
+				-- numhl = "GitSignsAddNr",
+				-- linehl = "GitSignsAddLn",
+			},
+			change = {
+				-- hl = "GitSignsChange",
+				text = icons.ui.BoldLineDashedMiddle,
+				-- numhl = "GitSignsChangeNr",
+				-- linehl = "GitSignsChangeLn",
+			},
+			delete = {
+				-- hl = "GitSignsDelete",
+				text = icons.ui.TriangleShortArrowRight,
+				-- numhl = "GitSignsDeleteNr",
+				-- linehl = "GitSignsDeleteLn",
+			},
+			topdelete = {
+				-- hl = "GitSignsDelete",
+				text = icons.ui.TriangleShortArrowRight,
+				-- numhl = "GitSignsTopDeleteNr",
+				-- linehl = "GitSignsDeleteLn",
+			},
+			changedelete = {
+				-- hl = "GitSignsChange",
+				text = icons.ui.BoldLineMiddle,
+				-- numhl = "GitSignsChangeNr",
+				-- linehl = "GitSignsChangeLn",
+			},
+		},
+		watch_gitdir = {
+			interval = 1000,
+			follow_files = true,
+		},
+		attach_to_untracked = true,
+		current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
+		update_debounce = 200,
+		max_file_length = 40000,
+		preview_config = {
+			border = "rounded",
+			style = "minimal",
+			relative = "cursor",
+			row = 0,
+			col = 1,
+		},
+	})
+end
+
+return M
