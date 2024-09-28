@@ -1,14 +1,5 @@
--- Set leader key (optional)
-vim.g.mapleader = " "
+-- bootstrap lazy.nvim, LazyVim and your plugins
+require("config.lazy")
+require("config.cmp")
 
--- Load general settings
-require("user.settings")
-
--- Load key mappings
-require("user.keymaps")
-
--- Load auto commands
-require("user.autocmds")
-
--- Initialize Lazy.nvim and load plugins
-require("user.plugins")
+vim.cmd("highlight FloatBorder guifg=#4A7FAE") -- Use your desired hex color

@@ -1,0 +1,5 @@
+    "lazyvim.plugins.extras.coding.yanky",
+
+    "lazyvim.plugins.extras.editor.leap",
+    "lazyvim.plugins.extras.lang.terraform",
+    "lazyvim.plugins.extras.lang.toml",
